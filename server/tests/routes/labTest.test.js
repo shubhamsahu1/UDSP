@@ -386,7 +386,9 @@ describe('LabTest Routes', () => {
     test('should handle server errors gracefully', async () => {
       // Mock a database error by breaking the connection temporarily
       const originalFind = LabTest.find;
-      LabTest.find = jest.fn().mockRejectedValue(new Error('Database error'));
+      LabTest.find = jest.fn().mockReturnValue({
+        sort: jest.fn().mockRejectedValue(new Error('Database error'))
+      });
 
       const response = await request(app)
         .get('/api/labtests')
