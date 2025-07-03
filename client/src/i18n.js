@@ -34,6 +34,8 @@ const resources = {
       
       // Navigation
       'nav.dashboard': 'Dashboard',
+      'nav.labtest': 'Lab Tests',
+      'nav.reports': 'Reports',
       'nav.users': 'Users',
       'nav.settings': 'Settings',
       'nav.profile': 'Profile',
@@ -174,6 +176,8 @@ const resources = {
       
       // Navigation
       'nav.dashboard': 'Panel de Control',
+      'nav.labtest': 'Pruebas de Laboratorio',
+      'nav.reports': 'Informes',
       'nav.users': 'Usuarios',
       'nav.settings': 'Configuración',
       'nav.profile': 'Perfil',

@@ -12,6 +12,8 @@ const Dashboard = lazy(() => import('../pages/Dashboard'));
 const UserManagement = lazy(() => import('../pages/UserManagement'));
 const ChangePassword = lazy(() => import('../pages/ChangePassword'));
 const Profile = lazy(() => import('../pages/Profile'));
+const LabTest = lazy(() => import('../pages/LabTest'));
+const Reports = lazy(() => import('../pages/Reports'));
 
 // MUI Suspense fallback
 const Loader = (
@@ -58,6 +60,22 @@ export const routes = [
       {
         path: "profile",
         element: <Profile />,
+      },
+      {
+        path: "labtest",
+        element: (
+          <ProtectedRoute role={USER_ROLES.ADMIN}>
+            <LabTest />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "reports",
+        element: (
+          <ProtectedRoute role={USER_ROLES.ADMIN}>
+            <Reports />
+          </ProtectedRoute>
+        ),
       },
       {
         path: "user-management",

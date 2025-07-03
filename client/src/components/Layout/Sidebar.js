@@ -13,15 +13,21 @@ import {
 import {
   Dashboard,
   Person,
+  Science,
+  Assessment,
 } from '@mui/icons-material';
 import { useTranslation } from 'react-i18next';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { useAuth } from '../../contexts/AuthContext';
+import { USER_ROLES } from '../../../constants/roles';
 
 const drawerWidth = 240;
 
 const menuItems = [
-  { text: 'nav.dashboard', icon: Dashboard, path: '/dashboard' },
-  { text: 'nav.profile', icon: Person, path: '/profile' },
+  { text: 'nav.dashboard', icon: Dashboard, path: '/dashboard', roles: ['admin', 'staff'] },
+  { text: 'nav.labtest', icon: Science, path: '/labtest', roles: ['admin'] },
+  { text: 'nav.reports', icon: Assessment, path: '/reports', roles: ['admin'] },
+  { text: 'nav.profile', icon: Person, path: '/profile', roles: ['admin', 'staff'] },
 ];
 
 const Sidebar = ({ open, onClose }) => {
@@ -30,6 +36,12 @@ const Sidebar = ({ open, onClose }) => {
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   const location = useLocation();
   const navigate = useNavigate();
+  const { user } = useAuth();
+
+  // Filter menu items based on user role
+  const visibleMenuItems = menuItems.filter(item => 
+    item.roles.includes(user?.role)
+  );
 
   const handleNavigation = (path) => {
     navigate(path);
@@ -41,7 +53,7 @@ const Sidebar = ({ open, onClose }) => {
   const drawerContent = (
     <>
       <List sx={{ pt: 2 }}>
-        {menuItems.map((item) => {
+        {visibleMenuItems.map((item) => {
           const Icon = item.icon;
           const isActive = location.pathname === item.path;
           
