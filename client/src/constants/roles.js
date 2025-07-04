@@ -1,6 +1,3 @@
-// Re-export shared constants for frontend use
-// This file converts CommonJS constants to ES6 exports for React
-
 // User Role Constants
 export const USER_ROLES = {
   ADMIN: 'admin',

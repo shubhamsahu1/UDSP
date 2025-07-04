@@ -2,7 +2,7 @@ import React, { Suspense, lazy } from 'react';
 import { createBrowserRouter, Navigate, RouterProvider } from 'react-router-dom';
 import { CircularProgress, Box } from '@mui/material';
 import { ProtectedRoute, PublicRoute } from '../components/ProtectedRoute/ProtectedRoute';
-import { USER_ROLES } from '../utils/shared-constants';
+import { USER_ROLES } from '../constants/roles';
 
 // Lazy load pages
 const Layout = lazy(() => import('../components/Layout/Layout'));

@@ -19,7 +19,7 @@ import {
 import { useTranslation } from 'react-i18next';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
-import { USER_ROLES } from '../../../constants/roles';
+import { USER_ROLES } from '../../constants/roles';
 
 const drawerWidth = 240;
 
