@@ -1,21 +1,22 @@
 #!/usr/bin/env node
 
 const mongoose = require('mongoose');
-const bcrypt = require('bcryptjs');
-const crypto = require('crypto');
 require('dotenv').config();
 
 const User = require('./server/models/User');
+const connectDB = require('./server/config/db');
 
 async function createAdminUser() {
+  let conn;
   try {
     // Connect to MongoDB
-    await mongoose.connect(process.env.MONGODB_URI);
+     conn = await connectDB(); 
+   
     
     console.log('✅ Connected to MongoDB');
     
     // Check if admin user already exists
-    const existingAdmin = await User.findOne({ role: 'admin' });
+    const existingAdmin = await User.findOne({ username: 'admin' });
     if (existingAdmin) {
       console.log('❌ Admin user already exists');
       process.exit(0);
@@ -73,7 +74,8 @@ async function createAdminUser() {
   } catch (error) {
     console.error('❌ Error creating admin user:', error.message);
   } finally {
-    await mongoose.disconnect();
+    await conn.disconnect();
+    console.log('✅ Disconnected from MongoDB');
     process.exit(0);
   }
 }

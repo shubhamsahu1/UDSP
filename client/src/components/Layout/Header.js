@@ -22,7 +22,7 @@ import {
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../../contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
-import { USER_ROLES } from '../../utils/constants';
+import { USER_ROLES } from '../../constants/roles';
 
 const Header = () => {
   const { t, i18n } = useTranslation();
@@ -47,6 +47,7 @@ const Header = () => {
   const handleChangeLanguage = (lng) => {
     i18n.changeLanguage(lng);
     setLangAnchorEl(null);
+    setAnchorEl(null); // Close the main menu as well
   };
 
   const handleLogout = () => {

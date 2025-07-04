@@ -35,7 +35,7 @@ import {
 } from '@mui/icons-material';
 import { useTranslation } from 'react-i18next';
 import { userAPI } from '../services/api';
-import { USER_ROLES, USER_ROLE_LABELS, USER_ROLE_COLORS } from '../utils/constants';
+import { USER_ROLES, USER_ROLE_LABELS, USER_ROLE_COLORS } from '../constants/roles';
 
 const UserManagement = () => {
   const { t } = useTranslation();

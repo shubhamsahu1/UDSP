@@ -25,6 +25,9 @@ if (process.env.NODE_ENV === 'production' && process.env.JWT_SECRET.length < 32)
 const connectDB = require('./config/db');
 const authRoutes = require('./routes/auth');
 const userRoutes = require('./routes/user');
+const labTestRoutes = require('./routes/labTest');
+const testDataRoutes = require('./routes/testData');
+const reportsRoutes = require('./routes/reports');
 
 const app = express();
 const PORT = process.env.PORT || 4000;
@@ -51,10 +54,12 @@ if (isProduction) {
     optionsSuccessStatus: 200
   }));
 } else {
-  app.use(cors({
-    origin: ['http://localhost:3000', 'http://localhost:3001'],
-    credentials: true
-  }));
+  app.use(cors(
+  //   {
+  //   origin: ['http://localhost:3000', 'http://localhost:3001'],
+  //   credentials: true
+  // }
+));
 }
 
 // Body parser middleware
@@ -74,6 +79,9 @@ app.get('/health', (req, res) => {
 // API Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/user', userRoutes);
+app.use('/api/labtests', labTestRoutes);
+app.use('/api/testdata', testDataRoutes);
+app.use('/api/reports', reportsRoutes);
 
 // Serve static files from the React app (only in production)
 if (isProduction) {
