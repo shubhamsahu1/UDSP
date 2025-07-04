@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { startTransition } from 'react';
 import {
   Drawer,
   List,
@@ -44,10 +44,12 @@ const Sidebar = ({ open, onClose }) => {
   );
 
   const handleNavigation = (path) => {
-    navigate(path);
-    if (isMobile) {
-      onClose();
-    }
+    startTransition(() => {
+      navigate(path);
+      if (isMobile) {
+        onClose();
+      }
+    });
   };
 
   const drawerContent = (
