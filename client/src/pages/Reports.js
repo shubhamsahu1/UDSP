@@ -27,6 +27,7 @@ import {
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../contexts/AuthContext';
 import { reportsService } from '../services/reportsService';
+import { DataGrid } from '@mui/x-data-grid';
 
 const Reports = () => {
   const { t } = useTranslation();
@@ -114,6 +115,62 @@ const Reports = () => {
       </Box>
     );
   }
+
+  // Prepare columns for DataGrid
+  const reportColumns = [
+    {
+      field: 'userName',
+      headerName: 'User Name',
+      width: 180,
+      renderCell: (params) => (
+        <strong style={{ fontWeight: 'medium' }}>{params.value}</strong>
+      ),
+    },
+    ...labTests.map((labTest) => ({
+      field: `labTest_${labTest.id}`,
+      headerName: labTest.name,
+      width: 180,
+      align: 'center',
+      headerAlign: 'center',
+      renderCell: (params) => {
+        const labData = params.value;
+        if (!labData) return null;
+        return (
+          <Box sx={{ display: 'flex', flexDirection: 'column', gap: 0.2, width: '100%', alignItems: 'center',mt: .5 }}>
+            <Box sx={{ display: 'flex', gap: 1, justifyContent: 'center' }}>
+              <Chip
+                label={labData.sampleTaken}
+                size="small"
+                color={labData.sampleTaken > 0 ? 'primary' : 'default'}
+              />
+              <Chip
+                label={labData.samplePositive}
+                size="small"
+                color={labData.samplePositive > 0 ? 'warning' : 'default'}
+              />
+            </Box>
+            {labData.sampleTaken > 0 && (
+              <Typography variant="caption" color="text.secondary">
+                {((labData.samplePositive / labData.sampleTaken) * 100).toFixed(1)}%
+              </Typography>
+            )}
+          </Box>
+        );
+      },
+    })),
+  ];
+
+  // Prepare rows for DataGrid
+  const reportRows = (reportData || []).map((userRow, idx) => {
+    const row = {
+      id: userRow.userId || idx, // DataGrid requires a unique id
+      userName: userRow.userName,
+    };
+    labTests.forEach((labTest) => {
+      row[`labTest_${labTest.id}`] = userRow.labTests[labTest.id];
+    });
+    return row;
+  });
 
   return (
     <Box>
@@ -255,72 +312,21 @@ const Reports = () => {
             </Button>
           </Box>
           <Divider />
-          
-          <TableContainer sx={{ maxHeight: 600 }}>
-            <Table stickyHeader>
-              <TableHead>
-                <TableRow>
-                  <TableCell sx={{ fontWeight: 'bold' }}>User Name</TableCell>
-                  {labTests.map((labTest) => (
-                    <TableCell key={labTest.id} align="center" sx={{ fontWeight: 'bold', backgroundColor: 'primary.light', color: 'white' }}>
-                      <Box>
-                        <Typography variant="subtitle2">{labTest.name}</Typography>
-                        <Box sx={{ display: 'flex', gap: 1, mt: 1 }}>
-                          <Chip label="Taken" size="small" variant="outlined" />
-                          <Chip label="Positive" size="small" variant="outlined" />
-                        </Box>
-                      </Box>
-                    </TableCell>
-                  ))}
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {reportData.length === 0 ? (
-                  <TableRow>
-                    <TableCell colSpan={labTests.length + 1} align="center" sx={{ py: 4 }}>
-                      <Typography variant="body2" color="text.secondary">
-                        No data found for the selected date range.
-                      </Typography>
-                    </TableCell>
-                  </TableRow>
-                ) : (
-                  reportData.map((userRow) => (
-                    <TableRow key={userRow.userId} hover>
-                      <TableCell sx={{ fontWeight: 'medium' }}>
-                        {userRow.userName}
-                      </TableCell>
-                      {labTests.map((labTest) => {
-                        const labData = userRow.labTests[labTest.id];
-                        return (
-                          <TableCell key={labTest.id} align="center">
-                            <Box sx={{ display: 'flex', flexDirection: 'column', gap: 0.5 }}>
-                              <Box sx={{ display: 'flex', gap: 1, justifyContent: 'center' }}>
-                                <Chip 
-                                  label={labData.sampleTaken} 
-                                  size="small" 
-                                  color={labData.sampleTaken > 0 ? 'primary' : 'default'}
-                                />
-                                <Chip 
-                                  label={labData.samplePositive} 
-                                  size="small" 
-                                  color={labData.samplePositive > 0 ? 'warning' : 'default'}
-                                />
-                              </Box>
-                              {labData.sampleTaken > 0 && (
-                                <Typography variant="caption" color="text.secondary">
-                                  {((labData.samplePositive / labData.sampleTaken) * 100).toFixed(1)}%
-                                </Typography>
-                              )}
-                            </Box>
-                          </TableCell>
-                        );
-                      })}
-                    </TableRow>
-                  ))
-                )}
-              </TableBody>
-            </Table>
-          </TableContainer>
+          <Box sx={{ height: 600, width: '100%' }}>
+            <DataGrid
+              autoHeight
+              rows={reportRows}
+              columns={reportColumns}
+              pageSize={10}
+              rowsPerPageOptions={[10, 25, 50]}
+              disableSelectionOnClick
+              sx={{ backgroundColor: 'background.paper' }}
+              getRowHeight={() => 'auto'}
+              localeText={{
+                noRowsLabel: 'No data found for the selected date range.'
+              }}
+            />
+          </Box>
         </Paper>
       )}
 
